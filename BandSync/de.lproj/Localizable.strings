@@ -1,0 +1,215 @@
+/*
+  Localizable.strings
+  BandSync
+  
+  Created by Claude AI on 31.03.2025.
+*/
+
+// Allgemeine Zeichenketten
+"Cancel" = "Abbrechen";
+"Save" = "Speichern";
+"Edit" = "Bearbeiten";
+"Delete" = "Löschen";
+"Close" = "Schließen";
+"Done" = "Fertig";
+"Add" = "Hinzufügen";
+"OK" = "OK";
+"Error" = "Fehler";
+"Success" = "Erfolg";
+"Loading" = "Laden";
+"Search" = "Suche";
+
+// Authentifizierung
+"Login" = "Anmelden";
+"Register" = "Registrieren";
+"Email" = "E-Mail";
+"Password" = "Passwort";
+"Forgot Password?" = "Passwort vergessen?";
+"Sign In" = "Anmelden";
+"Sign Up" = "Registrieren";
+"Sign In with Face ID" = "Mit Face ID anmelden";
+"Name" = "Name";
+"Phone" = "Telefon";
+"Reset Password" = "Passwort zurücksetzen";
+"Password Reset" = "Passwort zurücksetzen";
+"Password Reset Email Sent" = "E-Mail zum Zurücksetzen des Passworts gesendet";
+"Back" = "Zurück";
+
+// Gruppen
+"Create Group" = "Gruppe erstellen";
+"Join Group" = "Gruppe beitreten";
+"Group Name" = "Gruppenname";
+"Invitation Code" = "Einladungscode";
+"Create a Group" = "Gruppe erstellen";
+"Join a Group" = "Gruppe beitreten";
+"Welcome to BandSync!" = "Willkommen bei BandSync!";
+"To get started, create a new group or join an existing one" = "Um zu beginnen, erstelle eine neue Gruppe oder tritt einer bestehenden bei";
+"Group created successfully!" = "Gruppe erfolgreich erstellt!";
+"Request to join sent. Waiting for approval." = "Beitrittsanfrage gesendet. Warte auf Bestätigung.";
+
+// Hauptregisterkarten
+"Calendar" = "Kalender";
+"Setlists" = "Setlisten";
+"Finances" = "Finanzen";
+"Merch" = "Merch";
+"Tasks" = "Aufgaben";
+"Chats" = "Chats";
+"Contacts" = "Kontakte";
+"Settings" = "Einstellungen";
+"Admin Panel" = "Admin-Panel";
+
+// Kalender
+"New Event" = "Neues Ereignis";
+"Event" = "Ereignis";
+"Date" = "Datum";
+"Type" = "Typ";
+"Status" = "Status";
+"Location" = "Ort";
+"Fee" = "Gage";
+"Currency" = "Währung";
+"Organizer" = "Organisator";
+"Hotel" = "Hotel";
+"Check-in" = "Check-in";
+"Check-out" = "Check-out";
+"Notes" = "Notizen";
+"Concert" = "Konzert";
+"Rehearsal" = "Probe";
+"Meeting" = "Meeting";
+"Interview" = "Interview";
+"Photoshoot" = "Fotoshooting";
+"Personal" = "Persönlich";
+"Booked" = "Gebucht";
+"Confirmed" = "Bestätigt";
+"No events for selected date" = "Keine Ereignisse für das ausgewählte Datum";
+"Select a date" = "Datum auswählen";
+
+// Setlisten
+"New Setlist" = "Neue Setliste";
+"Setlist" = "Setliste";
+"Songs" = "Lieder";
+"Song" = "Lied";
+"BPM" = "BPM";
+"Duration" = "Dauer";
+"Total Duration" = "Gesamtdauer";
+"Add Song" = "Lied hinzufügen";
+"Export to PDF" = "Als PDF exportieren";
+"No songs in this setlist" = "Keine Lieder in dieser Setliste";
+"Setlist is empty" = "Setliste ist leer";
+"Generating PDF..." = "PDF wird generiert...";
+"Share" = "Teilen";
+
+// Finanzen
+"Income" = "Einnahmen";
+"Expense" = "Ausgaben";
+"Amount" = "Betrag";
+"Details" = "Details";
+"Category" = "Kategorie";
+"New Transaction" = "Neue Transaktion";
+"Transaction" = "Transaktion";
+"Profit" = "Gewinn";
+"Total Income" = "Gesamteinnahmen";
+"Total Expenses" = "Gesamtausgaben";
+"Logistics" = "Logistik";
+"Accommodation" = "Unterkunft";
+"Food" = "Verpflegung";
+"Gear" = "Ausrüstung";
+"Promo" = "Werbung";
+"Performance" = "Auftritte";
+"Merch" = "Merch";
+"Royalties" = "Lizenzgebühren";
+"Sponsorship" = "Sponsoring";
+"Other" = "Sonstiges";
+"Scan Receipt" = "Beleg scannen";
+
+// Merch
+"Merchandise" = "Merchandise";
+"New Item" = "Neuer Artikel";
+"Item" = "Artikel";
+"Price" = "Preis";
+"Stock" = "Bestand";
+"Size" = "Größe";
+"Clothing" = "Kleidung";
+"Music" = "Musik";
+"Accessory" = "Zubehör";
+"Description" = "Beschreibung";
+"Sell Item" = "Artikel verkaufen";
+"Sale" = "Verkauf";
+"Quantity" = "Menge";
+"Sales Channel" = "Verkaufskanal";
+"Concert" = "Konzert";
+"Online" = "Online";
+"Partner" = "Partner";
+
+// Aufgaben
+"New Task" = "Neue Aufgabe";
+"Task" = "Aufgabe";
+"Due Date" = "Fälligkeitsdatum";
+"Assigned To" = "Zugewiesen an";
+"Completed" = "Abgeschlossen";
+"Pending Tasks" = "Ausstehende Aufgaben";
+"Completed Tasks" = "Abgeschlossene Aufgaben";
+
+// Chats
+"New Chat" = "Neuer Chat";
+"Chat" = "Chat";
+"Message" = "Nachricht";
+"Group Chat" = "Gruppenchat";
+"Direct Chat" = "Direktchat";
+"No messages yet" = "Noch keine Nachrichten";
+"Send" = "Senden";
+"Reply" = "Antworten";
+
+// Kontakte
+"New Contact" = "Neuer Kontakt";
+"Contact" = "Kontakt";
+"Role" = "Rolle";
+"Musician" = "Musiker";
+"Organizer" = "Organisator";
+"Venue" = "Veranstaltungsort";
+"Manager" = "Manager";
+"Producer" = "Produzent";
+"Sound Engineer" = "Tontechniker";
+"Import from Contacts" = "Aus Kontakten importieren";
+"Call" = "Anrufen";
+"Email" = "E-Mail";
+"Send SMS" = "SMS senden";
+"No contacts yet" = "Noch keine Kontakte";
+
+// Einstellungen
+"Interface Language" = "Sprache der Benutzeroberfläche";
+"English" = "English";
+"Russian" = "Русский";
+"German" = "Deutsch";
+"Sign Out" = "Abmelden";
+"Theme" = "Theme";
+"Light" = "Hell";
+"Dark" = "Dunkel";
+"System" = "System";
+"Notifications" = "Benachrichtigungen";
+"About" = "Über";
+"Version" = "Version";
+
+// Admin-Panel
+"Group Settings" = "Gruppeneinstellungen";
+"Group Members" = "Gruppenmitglieder";
+"Permissions" = "Berechtigungen";
+"Application Modules" = "Anwendungsmodule";
+"Statistics" = "Statistiken";
+"Generate New Code" = "Neuen Code generieren";
+"Administration" = "Administration";
+"Members" = "Mitglieder";
+"Pending Approval" = "Ausstehende Genehmigung";
+"Approve" = "Genehmigen";
+"Reject" = "Ablehnen";
+"Remove" = "Entfernen";
+"Change Role" = "Rolle ändern";
+"Admin" = "Administrator";
+"Manager" = "Manager";
+"Musician" = "Musiker";
+"Member" = "Mitglied";
+"Update Name" = "Namen aktualisieren";
+"Reset to Default" = "Auf Standard zurücksetzen";
+"Available Modules" = "Verfügbare Module";
+"Reset Permissions" = "Berechtigungen zurücksetzen";
+"Export Group Data" = "Gruppendaten exportieren";
+"Test Notifications" = "Benachrichtigungen testen";

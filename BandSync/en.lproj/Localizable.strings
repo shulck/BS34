@@ -1,0 +1,215 @@
+/*
+  Localizable.strings
+  BandSync
+  
+  Created by Claude AI on 31.03.2025.
+*/
+
+// Common strings
+"Cancel" = "Cancel";
+"Save" = "Save";
+"Edit" = "Edit";
+"Delete" = "Delete";
+"Close" = "Close";
+"Done" = "Done";
+"Add" = "Add";
+"OK" = "OK";
+"Error" = "Error";
+"Success" = "Success";
+"Loading" = "Loading";
+"Search" = "Search";
+
+// Authentication
+"Login" = "Login";
+"Register" = "Register";
+"Email" = "Email";
+"Password" = "Password";
+"Forgot Password?" = "Forgot Password?";
+"Sign In" = "Sign In";
+"Sign Up" = "Sign Up";
+"Sign In with Face ID" = "Sign In with Face ID";
+"Name" = "Name";
+"Phone" = "Phone";
+"Reset Password" = "Reset Password";
+"Password Reset" = "Password Reset";
+"Password Reset Email Sent" = "Password Reset Email Sent";
+"Back" = "Back";
+
+// Groups
+"Create Group" = "Create Group";
+"Join Group" = "Join Group";
+"Group Name" = "Group Name";
+"Invitation Code" = "Invitation Code";
+"Create a Group" = "Create a Group";
+"Join a Group" = "Join a Group";
+"Welcome to BandSync!" = "Welcome to BandSync!";
+"To get started, create a new group or join an existing one" = "To get started, create a new group or join an existing one";
+"Group created successfully!" = "Group created successfully!";
+"Request to join sent. Waiting for approval." = "Request to join sent. Waiting for approval.";
+
+// Main Tabs
+"Calendar" = "Calendar";
+"Setlists" = "Setlists";
+"Finances" = "Finances";
+"Merch" = "Merch";
+"Tasks" = "Tasks";
+"Chats" = "Chats";
+"Contacts" = "Contacts";
+"Settings" = "Settings";
+"Admin Panel" = "Admin Panel";
+
+// Calendar
+"New Event" = "New Event";
+"Event" = "Event";
+"Date" = "Date";
+"Type" = "Type";
+"Status" = "Status";
+"Location" = "Location";
+"Fee" = "Fee";
+"Currency" = "Currency";
+"Organizer" = "Organizer";
+"Hotel" = "Hotel";
+"Check-in" = "Check-in";
+"Check-out" = "Check-out";
+"Notes" = "Notes";
+"Concert" = "Concert";
+"Rehearsal" = "Rehearsal";
+"Meeting" = "Meeting";
+"Interview" = "Interview";
+"Photoshoot" = "Photoshoot";
+"Personal" = "Personal";
+"Booked" = "Booked";
+"Confirmed" = "Confirmed";
+"No events for selected date" = "No events for selected date";
+"Select a date" = "Select a date";
+
+// Setlists
+"New Setlist" = "New Setlist";
+"Setlist" = "Setlist";
+"Songs" = "Songs";
+"Song" = "Song";
+"BPM" = "BPM";
+"Duration" = "Duration";
+"Total Duration" = "Total Duration";
+"Add Song" = "Add Song";
+"Export to PDF" = "Export to PDF";
+"No songs in this setlist" = "No songs in this setlist";
+"Setlist is empty" = "Setlist is empty";
+"Generating PDF..." = "Generating PDF...";
+"Share" = "Share";
+
+// Finances
+"Income" = "Income";
+"Expense" = "Expense";
+"Amount" = "Amount";
+"Details" = "Details";
+"Category" = "Category";
+"New Transaction" = "New Transaction";
+"Transaction" = "Transaction";
+"Profit" = "Profit";
+"Total Income" = "Total Income";
+"Total Expenses" = "Total Expenses";
+"Logistics" = "Logistics";
+"Accommodation" = "Accommodation";
+"Food" = "Food";
+"Gear" = "Gear";
+"Promo" = "Promo";
+"Performance" = "Performance";
+"Merch" = "Merch";
+"Royalties" = "Royalties";
+"Sponsorship" = "Sponsorship";
+"Other" = "Other";
+"Scan Receipt" = "Scan Receipt";
+
+// Merch
+"Merchandise" = "Merchandise";
+"New Item" = "New Item";
+"Item" = "Item";
+"Price" = "Price";
+"Stock" = "Stock";
+"Size" = "Size";
+"Clothing" = "Clothing";
+"Music" = "Music";
+"Accessory" = "Accessory";
+"Description" = "Description";
+"Sell Item" = "Sell Item";
+"Sale" = "Sale";
+"Quantity" = "Quantity";
+"Sales Channel" = "Sales Channel";
+"Concert" = "Concert";
+"Online" = "Online";
+"Partner" = "Partner";
+
+// Tasks
+"New Task" = "New Task";
+"Task" = "Task";
+"Due Date" = "Due Date";
+"Assigned To" = "Assigned To";
+"Completed" = "Completed";
+"Pending Tasks" = "Pending Tasks";
+"Completed Tasks" = "Completed Tasks";
+
+// Chats
+"New Chat" = "New Chat";
+"Chat" = "Chat";
+"Message" = "Message";
+"Group Chat" = "Group Chat";
+"Direct Chat" = "Direct Chat";
+"No messages yet" = "No messages yet";
+"Send" = "Send";
+"Reply" = "Reply";
+
+// Contacts
+"New Contact" = "New Contact";
+"Contact" = "Contact";
+"Role" = "Role";
+"Musician" = "Musician";
+"Organizer" = "Organizer";
+"Venue" = "Venue";
+"Manager" = "Manager";
+"Producer" = "Producer";
+"Sound Engineer" = "Sound Engineer";
+"Import from Contacts" = "Import from Contacts";
+"Call" = "Call";
+"Email" = "Email";
+"Send SMS" = "Send SMS";
+"No contacts yet" = "No contacts yet";
+
+// Settings
+"Interface Language" = "Interface Language";
+"English" = "English";
+"Russian" = "Russian";
+"German" = "German";
+"Sign Out" = "Sign Out";
+"Theme" = "Theme";
+"Light" = "Light";
+"Dark" = "Dark";
+"System" = "System";
+"Notifications" = "Notifications";
+"About" = "About";
+"Version" = "Version";
+
+// Admin Panel
+"Group Settings" = "Group Settings";
+"Group Members" = "Group Members";
+"Permissions" = "Permissions";
+"Application Modules" = "Application Modules";
+"Statistics" = "Statistics";
+"Generate New Code" = "Generate New Code";
+"Administration" = "Administration";
+"Members" = "Members";
+"Pending Approval" = "Pending Approval";
+"Approve" = "Approve";
+"Reject" = "Reject";
+"Remove" = "Remove";
+"Change Role" = "Change Role";
+"Admin" = "Admin";
+"Manager" = "Manager";
+"Musician" = "Musician";
+"Member" = "Member";
+"Update Name" = "Update Name";
+"Reset to Default" = "Reset to Default";
+"Available Modules" = "Available Modules";
+"Reset Permissions" = "Reset Permissions";
+"Export Group Data" = "Export Group Data";
+"Test Notifications" = "Test Notifications";

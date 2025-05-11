@@ -1,0 +1,238 @@
+/*
+  Localizable.strings
+  BandSync
+  
+  Created by Claude AI on 31.03.2025.
+*/
+
+// Общие строки
+"Cancel" = "Отмена";
+"Save" = "Сохранить";
+"Edit" = "Редактировать";
+"Delete" = "Удалить";
+"Close" = "Закрыть";
+"Done" = "Готово";
+"Add" = "Добавить";
+"OK" = "ОК";
+"Error" = "Ошибка";
+"Success" = "Успешно";
+"Loading" = "Загрузка";
+"Search" = "Поиск";
+
+// Аутентификация
+"Login" = "Вход";
+"Register" = "Регистрация";
+"Email" = "Email";
+"Password" = "Пароль";
+"Forgot Password?" = "Забыли пароль?";
+"Sign In" = "Войти";
+"Sign Up" = "Зарегистрироваться";
+"Sign In with Face ID" = "Войти с Face ID";
+"Name" = "Имя";
+"Phone" = "Телефон";
+"Reset Password" = "Сбросить пароль";
+"Password Reset" = "Сброс пароля";
+"Password Reset Email Sent" = "Письмо для сброса пароля отправлено";
+"Back" = "Назад";
+
+// Группы
+"Create Group" = "Создать группу";
+"Join Group" = "Присоединиться к группе";
+"Group Name" = "Название группы";
+"Invitation Code" = "Код приглашения";
+"Create a Group" = "Создать группу";
+"Join a Group" = "Присоединиться к группе";
+"Welcome to BandSync!" = "Добро пожаловать в BandSync!";
+"To get started, create a new group or join an existing one" = "Чтобы начать, создайте новую группу или присоединитесь к существующей";
+"Group created successfully!" = "Группа успешно создана!";
+"Request to join sent. Waiting for approval." = "Запрос на вступление отправлен. Ожидайте подтверждения.";
+
+// Главные вкладки
+"Calendar" = "Календарь";
+"Setlists" = "Сетлисты";
+"Finances" = "Финансы";
+"Merch" = "Мерч";
+"Tasks" = "Задачи";
+"Chats" = "Чаты";
+"Contacts" = "Контакты";
+"Settings" = "Настройки";
+"Admin Panel" = "Админ-панель";
+
+// Календарь
+"New Event" = "Новое событие";
+"Event" = "Событие";
+"Date" = "Дата";
+"Type" = "Тип";
+"Status" = "Статус";
+"Location" = "Место";
+"Fee" = "Гонорар";
+"Currency" = "Валюта";
+"Organizer" = "Организатор";
+"Hotel" = "Отель";
+"Check-in" = "Заезд";
+"Check-out" = "Выезд";
+"Notes" = "Заметки";
+"Concert" = "Концерт";
+"Rehearsal" = "Репетиция";
+"Meeting" = "Встреча";
+"Interview" = "Интервью";
+"Photoshoot" = "Фотосессия";
+"Personal" = "Личное";
+"Booked" = "Забронировано";
+"Confirmed" = "Подтверждено";
+"No events for selected date" = "Нет событий на выбранную дату";
+"Select a date" = "Выберите дату";
+
+// Сетлисты
+"New Setlist" = "Новый сетлист";
+"Setlist" = "Сетлист";
+"Songs" = "Песни";
+"Song" = "Песня";
+"BPM" = "BPM";
+"Duration" = "Длительность";
+"Total Duration" = "Общая длительность";
+"Add Song" = "Добавить песню";
+"Export to PDF" = "Экспорт в PDF";
+"No songs in this setlist" = "В этом сетлисте нет песен";
+"Setlist is empty" = "Сетлист пустой";
+"Generating PDF..." = "Генерация PDF...";
+"Share" = "Поделиться";
+
+// Финансы
+"Income" = "Доход";
+"Expense" = "Расход";
+"Amount" = "Сумма";
+"Details" = "Детали";
+"Category" = "Категория";
+"New Transaction" = "Новая операция";
+"Transaction" = "Операция";
+"Profit" = "Прибыль";
+"Total Income" = "Общий доход";
+"Total Expenses" = "Общие расходы";
+"Logistics" = "Логистика";
+"Accommodation" = "Проживание";
+"Food" = "Питание";
+"Gear" = "Оборудование";
+"Promo" = "Продвижение";
+"Performance" = "Выступления";
+"Merch" = "Мерч";
+"Royalties" = "Роялти";
+"Sponsorship" = "Спонсорство";
+"Other" = "Другое";
+"Scan Receipt" = "Сканировать чек";
+"New Entry" = "Нова запис";
+"Income" = "Дохід";
+"Expense" = "Витрата";
+"Category" = "Категорія";
+"Amount" = "Сума";
+"Currency" = "Валюта";
+"Description" = "Опис";
+"Date" = "Дата";
+"Scan Receipt" = "Сканувати чек";
+"Cancel" = "Скасувати";
+"Save" = "Зберегти";
+"New Entry" = "Новая запись";
+"Income" = "Доход";
+"Expense" = "Расход";
+"Category" = "Категория";
+"Amount" = "Сумма";
+"Currency" = "Валюта";
+"Description" = "Описание";
+"Date" = "Дата";
+"Scan Receipt" = "Сканировать чек";
+"Cancel" = "Отмена";
+"Save" = "Сохранить";
+
+
+// Мерч
+"Merchandise" = "Мерч";
+"New Item" = "Новый товар";
+"Item" = "Товар";
+"Price" = "Цена";
+"Stock" = "Остатки";
+"Size" = "Размер";
+"Clothing" = "Одежда";
+"Music" = "Музыка";
+"Accessory" = "Аксессуары";
+"Description" = "Описание";
+"Sell Item" = "Продать товар";
+"Sale" = "Продажа";
+"Quantity" = "Количество";
+"Sales Channel" = "Канал продаж";
+"Concert" = "Концерт";
+"Online" = "Онлайн";
+"Partner" = "Партнёр";
+
+// Задачи
+"New Task" = "Новая задача";
+"Task" = "Задача";
+"Due Date" = "Срок";
+"Assigned To" = "Назначено";
+"Completed" = "Выполнено";
+"Pending Tasks" = "Текущие задачи";
+"Completed Tasks" = "Выполненные задачи";
+
+// Чаты
+"New Chat" = "Новый чат";
+"Chat" = "Чат";
+"Message" = "Сообщение";
+"Group Chat" = "Групповой чат";
+"Direct Chat" = "Личный чат";
+"No messages yet" = "Пока нет сообщений";
+"Send" = "Отправить";
+"Reply" = "Ответить";
+
+// Контакты
+"New Contact" = "Новый контакт";
+"Contact" = "Контакт";
+"Role" = "Роль";
+"Musician" = "Музыкант";
+"Organizer" = "Организатор";
+"Venue" = "Площадка";
+"Manager" = "Менеджер";
+"Producer" = "Продюсер";
+"Sound Engineer" = "Звукорежиссер";
+"Import from Contacts" = "Импорт из контактов";
+"Call" = "Позвонить";
+"Email" = "Написать";
+"Send SMS" = "Отправить SMS";
+"No contacts yet" = "Пока нет контактов";
+
+// Настройки
+"Interface Language" = "Язык интерфейса";
+"English" = "English";
+"Russian" = "Русский";
+"German" = "Deutsch";
+"Sign Out" = "Выйти";
+"Theme" = "Тема";
+"Light" = "Светлая";
+"Dark" = "Тёмная";
+"System" = "Системная";
+"Notifications" = "Уведомления";
+"About" = "О приложении";
+"Version" = "Версия";
+
+// Админ-панель
+"Group Settings" = "Настройки группы";
+"Group Members" = "Участники группы";
+"Permissions" = "Разрешения";
+"Application Modules" = "Модули приложения";
+"Statistics" = "Статистика";
+"Generate New Code" = "Сгенерировать новый код";
+"Administration" = "Администрирование";
+"Members" = "Участники";
+"Pending Approval" = "Ожидают подтверждения";
+"Approve" = "Подтвердить";
+"Reject" = "Отклонить";
+"Remove" = "Удалить";
+"Change Role" = "Изменить роль";
+"Admin" = "Администратор";
+"Manager" = "Менеджер";
+"Musician" = "Музыкант";
+"Member" = "Участник";
+"Update Name" = "Обновить название";
+"Reset to Default" = "Сбросить к значениям по умолчанию";
+"Available Modules" = "Доступные модули";
+"Reset Permissions" = "Сбросить разрешения";
+"Export Group Data" = "Экспорт данных группы";
+"Test Notifications" = "Тестировать уведомления";
