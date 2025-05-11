@@ -7,8 +7,10 @@ struct UserModel: Identifiable, Codable, Equatable {
     let phone: String
     let groupId: String?
     var role: UserRole
-    var isOnline: Bool?          
+    var isOnline: Bool?
     var lastSeen: Date?
+    var fcmToken: String? // Добавляем поле для хранения FCM токена
+    var taskNotificationsEnabled: Bool = true // Добавляем настройку уведомлений о задачах
 
     enum UserRole: String, Codable, CaseIterable, Identifiable {
         case admin = "Admin"

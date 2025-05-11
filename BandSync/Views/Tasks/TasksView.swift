@@ -1,10 +1,3 @@
-//
-//  TasksView.swift
-//  BandSync
-//
-//  Created by Oleksandr Kuziakin on 31.03.2025.
-//
-
 import SwiftUI
 
 struct TasksView: View {
@@ -16,6 +9,8 @@ struct TasksView: View {
     @State private var selectedPriority: TaskPriority? = nil
     @State private var showingTaskDetail = false
     @State private var selectedTask: TaskModel? = nil
+    @State private var newTaskIds = Set<String>() // Для отслеживания новых задач
+    @State private var showMyTasksOnly = false
     
     enum FilterMode: String, CaseIterable {
         case all = "All"
@@ -32,6 +27,24 @@ struct TasksView: View {
                 SearchBar(text: $searchText, placeholder: "Search tasks")
                     .padding(.horizontal)
                     .padding(.top, 8)
+                
+                // My Tasks toggle
+                HStack {
+                    Toggle("My tasks only", isOn: $showMyTasksOnly)
+                        .toggleStyle(SwitchToggleStyle(tint: .blue))
+                        .padding(.horizontal)
+                    
+                    Spacer()
+                    
+                    // Badge showing number of new tasks
+                    HStack {
+                        Text("New: ")
+                            .font(.caption)
+                        NotificationBadge(count: newTasksCount)
+                    }
+                    .padding(.horizontal)
+                }
+                .padding(.vertical, 8)
                 
                 // Filter categories
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -104,11 +117,23 @@ struct TasksView: View {
                 // Task list
                 List {
                     ForEach(filteredTasks) { task in
-                        TaskRow(task: task)
-                            .onTapGesture {
-                                selectedTask = task
-                                showingTaskDetail = true
+                        // Используем модифицированный TaskRow с индикацией новых задач
+                        TaskRowWithNotification(
+                            task: task,
+                            isNew: isNewTask(task),
+                            toggleAction: {
+                                TaskService.shared.toggleCompletion(task)
                             }
+                        )
+                        .onTapGesture {
+                            selectedTask = task
+                            showingTaskDetail = true
+                            
+                            // Убираем задачу из списка новых при просмотре
+                            if let id = task.id, newTaskIds.contains(id) {
+                                newTaskIds.remove(id)
+                            }
+                        }
                     }
                     
                     if filteredTasks.isEmpty {
@@ -131,9 +156,11 @@ struct TasksView: View {
                 }
             }
             .onAppear {
-                if let groupId = AppState.shared.user?.groupId {
-                    taskService.fetchTasks(for: groupId)
-                }
+                loadTasks()
+                setupNotificationObservers()
+            }
+            .onDisappear {
+                removeNotificationObservers()
             }
             .sheet(isPresented: $showAddTask) {
                 AddTaskView()
@@ -146,10 +173,79 @@ struct TasksView: View {
         }
     }
     
+    // Настройка наблюдателей за уведомлениями
+    private func setupNotificationObservers() {
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name("TaskNotificationReceived"),
+            object: nil,
+            queue: .main) { notification in
+                if let taskId = notification.userInfo?["taskId"] as? String {
+                    // Добавляем задачу в список новых
+                    newTaskIds.insert(taskId)
+                }
+            }
+        
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name("TaskNotificationTapped"),
+            object: nil,
+            queue: .main) { notification in
+                if let taskId = notification.userInfo?["taskId"] as? String {
+                    // Находим и отображаем задачу
+                    if let task = taskService.tasks.first(where: { $0.id == taskId }) {
+                        selectedTask = task
+                        showingTaskDetail = true
+                        
+                        // Убираем задачу из списка новых
+                        newTaskIds.remove(taskId)
+                    }
+                }
+            }
+    }
+    
+    private func removeNotificationObservers() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    // Загрузка задач и инициализация списка новых
+    private func loadTasks() {
+        if let groupId = AppState.shared.user?.groupId {
+            taskService.fetchTasks(for: groupId)
+            
+            // Добавляем все новые задачи в множество
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                // Новые задачи - это задачи, созданные менее 24 часов назад
+                let newlyCreatedTasks = taskService.getNewlyAssignedTasks()
+                for task in newlyCreatedTasks {
+                    if let id = task.id {
+                        newTaskIds.insert(id)
+                    }
+                }
+            }
+        }
+    }
+    
+    // Проверка, является ли задача новой
+    private func isNewTask(_ task: TaskModel) -> Bool {
+        if let id = task.id {
+            return newTaskIds.contains(id)
+        }
+        return false
+    }
+    
+    // Количество новых задач
+    private var newTasksCount: Int {
+        newTaskIds.count
+    }
+    
     // Filter tasks based on mode, category, priority, and search text
     private var filteredTasks: [TaskModel] {
         // Start with all tasks
         var tasks = taskService.tasks
+        
+        // Если включен фильтр "Только мои задачи"
+        if showMyTasksOnly, let userId = AppState.shared.user?.id {
+            tasks = tasks.filter { $0.assignedTo == userId }
+        }
         
         // Apply filter mode
         switch filterMode {
@@ -192,64 +288,6 @@ struct TasksView: View {
                 return !$0.completed && $1.completed
             }
         }
-    }
-    
-    private func TaskRow(task: TaskModel) -> some View {
-        HStack {
-            Button(action: {
-                TaskService.shared.toggleCompletion(task)
-            }) {
-                Image(systemName: task.completed ? "checkmark.circle.fill" : "circle")
-                    .foregroundColor(task.completed ? .green : .gray)
-                    .font(.title3)
-            }
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(task.title)
-                    .font(.headline)
-                    .foregroundColor(task.completed ? .gray : .primary)
-                    .strikethrough(task.completed)
-                
-                HStack {
-                    // Due date
-                    Text("Due: \(formattedDate(task.dueDate))")
-                        .font(.caption)
-                        .foregroundColor(isOverdue(task) ? .red : .gray)
-                    
-                    // Category
-                    Label(task.category.rawValue, systemImage: task.category.iconName)
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                        .padding(.horizontal, 5)
-                }
-            }
-            
-            Spacer()
-            
-            // Priority indicator
-            Image(systemName: task.priority.iconName)
-                .foregroundColor(Color(hex: task.priority.color))
-                .font(.caption)
-        }
-        .swipeActions {
-            Button(role: .destructive) {
-                TaskService.shared.deleteTask(task)
-            } label: {
-                Label("Delete", systemImage: "trash")
-            }
-        }
-    }
-    
-    // Check if task is overdue
-    private func isOverdue(_ task: TaskModel) -> Bool {
-        return !task.completed && task.dueDate < Date()
-    }
-    
-    // Format date
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        return formatter.string(from: date)
     }
 }
 

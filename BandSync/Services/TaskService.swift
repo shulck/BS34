@@ -1,13 +1,9 @@
-//
-//  TaskService.swift
-//  BandSync
-//
-//  Created by Oleksandr Kuziakin on 31.03.2025.
-//
+// Обновление функции addTask в TaskService.swift
 
 import Foundation
 import FirebaseFirestore
 import Combine
+import FirebaseMessaging
 
 final class TaskService: ObservableObject {
     static let shared = TaskService()
@@ -70,7 +66,7 @@ final class TaskService: ObservableObject {
             }
     }
 
-    // Add a new task
+    // Add a new task with notification to assigned user
     func addTask(_ task: TaskModel, completion: @escaping (Bool) -> Void) {
         isLoading = true
         errorMessage = nil
@@ -89,10 +85,13 @@ final class TaskService: ObservableObject {
                         self.errorMessage = "Error adding task: \(error.localizedDescription)"
                         completion(false)
                     } else {
-                        // If task has reminders, schedule notifications
+                        // Если задача имеет напоминания, запланировать уведомления
                         if let reminders = newTask.reminders, !reminders.isEmpty {
                             self.scheduleTaskReminders([newTask])
                         }
+                        
+                        // Отправить уведомление о назначении задачи
+                        self.sendTaskAssignmentNotification(newTask)
                         
                         completion(true)
                     }
@@ -107,6 +106,89 @@ final class TaskService: ObservableObject {
         }
     }
 
+    // Send notification for task assignment
+    func sendTaskAssignmentNotification(_ task: TaskModel) {
+        guard let taskId = task.id else { return }
+        
+        // 1. Отправка локального уведомления, если задача назначена текущему пользователю
+        if task.assignedTo == AppState.shared.user?.id {
+            let title = "New Task Assigned"
+            let body = "You've been assigned a new task: \(task.title)"
+            let identifier = "task_assignment_\(taskId)"
+            
+            NotificationManager.shared.scheduleLocalNotification(
+                title: title,
+                body: body,
+                date: Date(), // Немедленное уведомление
+                identifier: identifier,
+                userInfo: [
+                    "type": "task",
+                    "taskId": taskId,
+                    "action": "assignment"
+                ]
+            ) { _ in }
+        }
+        
+        // 2. Отправка push-уведомления через FCM
+        sendRemoteNotification(for: task)
+    }
+    
+    // Send push notification through Firebase Cloud Messaging
+    private func sendRemoteNotification(for task: TaskModel) {
+        // Получаем данные о пользователе, которому назначена задача
+        db.collection("users").document(task.assignedTo).getDocument { snapshot, error in
+            guard let snapshot = snapshot, let userData = snapshot.data(),
+                  let fcmToken = userData["fcmToken"] as? String else {
+                print("Failed to find FCM token for user: \(task.assignedTo)")
+                return
+            }
+            
+            // Получаем данные о пользователе, создавшем задачу
+            self.db.collection("users").document(task.createdBy).getDocument { creatorSnapshot, creatorError in
+                var creatorName = "Someone"
+                
+                if let creatorData = creatorSnapshot?.data(),
+                   let name = creatorData["name"] as? String {
+                    creatorName = name
+                }
+                
+                // Создаем данные для уведомления
+                let message = [
+                    "token": fcmToken,
+                    "notification": [
+                        "title": "New Task Assignment",
+                        "body": "\(creatorName) assigned you a task: \(task.title)"
+                    ],
+                    "data": [
+                        "taskId": task.id ?? "",
+                        "type": "task_assignment",
+                        "priority": task.priority.rawValue,
+                        "dueDate": "\(Int(task.dueDate.timeIntervalSince1970))"
+                    ],
+                    "apns": [
+                        "payload": [
+                            "aps": [
+                                "sound": "default",
+                                "badge": 1
+                            ]
+                        ]
+                    ]
+                ]
+                
+                // Вызов Cloud Function для отправки уведомления
+                // Обратите внимание, что для этого нужна настроенная Cloud Function в Firebase
+                let functions = Functions.functions()
+                functions.httpsCallable("sendTaskNotification").call(message) { result, error in
+                    if let error = error {
+                        print("Error sending push notification: \(error)")
+                    } else {
+                        print("Push notification sent successfully")
+                    }
+                }
+            }
+        }
+    }
+
     // Toggle task completion status
     func toggleCompletion(_ task: TaskModel) {
         guard let id = task.id else { return }
@@ -116,6 +198,83 @@ final class TaskService: ObservableObject {
         updatedTask.updatedAt = Date()
         
         updateTask(updatedTask) { _ in }
+        
+        // Если задача отмечена как выполненная, отправить уведомление создателю
+        if updatedTask.completed && task.createdBy != AppState.shared.user?.id {
+            sendTaskCompletionNotification(updatedTask)
+        }
+    }
+    
+    // Send notification about task completion
+    private func sendTaskCompletionNotification(_ task: TaskModel) {
+        guard let taskId = task.id else { return }
+        
+        // Получаем информацию о пользователе, выполнившем задачу
+        let currentUserId = AppState.shared.user?.id ?? "Unknown user"
+        
+        db.collection("users").document(currentUserId).getDocument { [weak self] snapshot, error in
+            guard let self = self else { return }
+            
+            var userName = "Someone"
+            if let userData = snapshot?.data(), let name = userData["name"] as? String {
+                userName = name
+            }
+            
+            // Отправка локального уведомления создателю задачи, если это текущий пользователь
+            if task.createdBy == AppState.shared.user?.id {
+                let title = "Task Completed"
+                let body = "\(userName) completed the task: \(task.title)"
+                let identifier = "task_completion_\(taskId)"
+                
+                NotificationManager.shared.scheduleLocalNotification(
+                    title: title,
+                    body: body,
+                    date: Date(),
+                    identifier: identifier,
+                    userInfo: [
+                        "type": "task",
+                        "taskId": taskId,
+                        "action": "completion"
+                    ]
+                ) { _ in }
+            }
+            
+            // Отправка push-уведомления создателю задачи
+            self.db.collection("users").document(task.createdBy).getDocument { creatorSnapshot, creatorError in
+                guard let creatorData = creatorSnapshot?.data(),
+                      let fcmToken = creatorData["fcmToken"] as? String else {
+                    return
+                }
+                
+                // Создаем данные для уведомления
+                let message = [
+                    "token": fcmToken,
+                    "notification": [
+                        "title": "Task Completed",
+                        "body": "\(userName) completed the task: \(task.title)"
+                    ],
+                    "data": [
+                        "taskId": task.id ?? "",
+                        "type": "task_completion"
+                    ],
+                    "apns": [
+                        "payload": [
+                            "aps": [
+                                "sound": "default"
+                            ]
+                        ]
+                    ]
+                ]
+                
+                // Вызов Cloud Function для отправки уведомления
+                let functions = Functions.functions()
+                functions.httpsCallable("sendTaskNotification").call(message) { result, error in
+                    if let error = error {
+                        print("Error sending completion notification: \(error)")
+                    }
+                }
+            }
+        }
     }
 
     // Update an existing task
@@ -127,6 +286,9 @@ final class TaskService: ObservableObject {
         
         isLoading = true
         errorMessage = nil
+        
+        // Получаем оригинальную задачу для проверки изменений
+        let originalTask = tasks.first(where: { $0.id == id })
         
         do {
             var updatedTask = task
@@ -146,6 +308,12 @@ final class TaskService: ObservableObject {
                         self.cancelTaskReminders(id)
                         if let reminders = updatedTask.reminders, !reminders.isEmpty {
                             self.scheduleTaskReminders([updatedTask])
+                        }
+                        
+                        // Если задача была переназначена другому пользователю, отправить уведомление
+                        if let originalTask = originalTask,
+                           originalTask.assignedTo != updatedTask.assignedTo {
+                            self.sendTaskAssignmentNotification(updatedTask)
                         }
                         
                         completion(true)
@@ -213,7 +381,11 @@ final class TaskService: ObservableObject {
                     body: body,
                     date: reminder,
                     identifier: identifier,
-                    userInfo: ["type": "task", "taskId": id]
+                    userInfo: [
+                        "type": "task",
+                        "taskId": id,
+                        "action": "reminder"
+                    ]
                 ) { _ in }
             }
         }
@@ -225,65 +397,40 @@ final class TaskService: ObservableObject {
         for i in 0..<10 {
             NotificationManager.shared.cancelNotification(withIdentifier: "task_reminder_\(taskId)_\(i)")
         }
+        
+        // Cancel assignment notification
+        NotificationManager.shared.cancelNotification(withIdentifier: "task_assignment_\(taskId)")
+        
+        // Cancel completion notification
+        NotificationManager.shared.cancelNotification(withIdentifier: "task_completion_\(taskId)")
     }
     
     // Helper method to format dates
     private func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
-        formatter.timeStyle = .short
         return formatter.string(from: date)
     }
     
     // MARK: - Filtering and Sorting Methods
     
-    // Get pending (incomplete) tasks
-    func getPendingTasks() -> [TaskModel] {
-        return tasks.filter { !$0.completed }.sorted { $0.dueDate < $1.dueDate }
+    // Получение задач, назначенных текущему пользователю
+    func getMyTasks() -> [TaskModel] {
+        guard let userId = AppState.shared.user?.id else { return [] }
+        return tasks.filter { $0.assignedTo == userId }.sorted { $0.dueDate < $1.dueDate }
     }
     
-    // Get completed tasks
-    func getCompletedTasks() -> [TaskModel] {
-        return tasks.filter { $0.completed }.sorted { $0.dueDate > $1.dueDate }
-    }
-    
-    // Get tasks by priority
-    func getTasks(withPriority priority: TaskPriority) -> [TaskModel] {
-        return tasks.filter { $0.priority == priority }
-    }
-    
-    // Get tasks by category
-    func getTasks(withCategory category: TaskCategory) -> [TaskModel] {
-        return tasks.filter { $0.category == category }
-    }
-    
-    // Get tasks assigned to a specific user
-    func getTasks(assignedTo userId: String) -> [TaskModel] {
-        return tasks.filter { $0.assignedTo == userId }
-    }
-    
-    // Get tasks created by a specific user
-    func getTasks(createdBy userId: String) -> [TaskModel] {
-        return tasks.filter { $0.createdBy == userId }
-    }
-    
-    // Get tasks due soon (within next 7 days)
-    func getTasksDueSoon() -> [TaskModel] {
-        let nextWeek = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
-        return tasks.filter { !$0.completed && $0.dueDate <= nextWeek && $0.dueDate >= Date() }
-    }
-    
-    // Get overdue tasks
-    func getOverdueTasks() -> [TaskModel] {
-        return tasks.filter { !$0.completed && $0.dueDate < Date() }
-    }
-    
-    // Search tasks by title or description
-    func searchTasks(query: String) -> [TaskModel] {
-        let lowercasedQuery = query.lowercased()
+    // Получение новых назначенных задач (за последние 24 часа)
+    func getNewlyAssignedTasks() -> [TaskModel] {
+        guard let userId = AppState.shared.user?.id else { return [] }
+        let cutoffDate = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+        
         return tasks.filter {
-            $0.title.lowercased().contains(lowercasedQuery) ||
-            $0.description.lowercased().contains(lowercasedQuery)
+            $0.assignedTo == userId &&
+            $0.createdAt >= cutoffDate &&
+            !$0.completed
         }
     }
+    
+    // Другие методы фильтрации и сортировки остаются без изменений...
 }

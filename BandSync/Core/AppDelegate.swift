@@ -1,9 +1,4 @@
-//
-//  AppDelegate.swift
-//  BandSync
-//
-//  Created by Oleksandr Kuziakin on 31.03.2025.
-//
+// Обновленный метод в AppDelegate.swift
 
 import UIKit
 import Firebase
@@ -20,6 +15,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         FirebaseManager.shared.initialize()
         print("AppDelegate: after Firebase initialization")
         updateUserOnlineStatus(isOnline: true)
+        
         // Notification setup
         UNUserNotificationCenter.current().delegate = self
         print("AppDelegate: notification delegate set")
@@ -57,8 +53,30 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         if let token = fcmToken {
             print("AppDelegate: FCM token received: \(token)")
+            // Сохраняем токен в UserDefaults для быстрого доступа
+            UserDefaults.standard.set(token, forKey: "fcmToken")
+            
+            // Если пользователь уже авторизован, обновляем его профиль с новым токеном
+            if let userId = Auth.auth().currentUser?.uid {
+                updateUserFCMToken(userId: userId, token: token)
+            }
         } else {
             print("AppDelegate: failed to get FCM token")
+        }
+    }
+    
+    // Обновление FCM токена пользователя в Firestore
+    private func updateUserFCMToken(userId: String, token: String) {
+        let userRef = Firestore.firestore().collection("users").document(userId)
+        
+        userRef.updateData([
+            "fcmToken": token
+        ]) { error in
+            if let error = error {
+                print("AppDelegate: Error updating FCM token: \(error.localizedDescription)")
+            } else {
+                print("AppDelegate: FCM token successfully updated for user \(userId)")
+            }
         }
     }
     
@@ -69,6 +87,25 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
         print("AppDelegate: notification received in foreground")
+        
+        // Получение данных уведомления
+        let userInfo = notification.request.content.userInfo
+        
+        // Обработка уведомлений о задачах
+        if let type = userInfo["type"] as? String, type == "task" {
+            // Обновляем список задач, чтобы подсвечивать новые
+            if let taskId = userInfo["taskId"] as? String {
+                print("AppDelegate: received notification for task: \(taskId)")
+                
+                // Обновляем отображение задач
+                NotificationCenter.default.post(
+                    name: NSNotification.Name("TaskNotificationReceived"),
+                    object: nil,
+                    userInfo: ["taskId": taskId]
+                )
+            }
+        }
+        
         // Show notification even if app is open
         completionHandler([.banner, .sound, .badge])
     }
@@ -81,6 +118,28 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
     ) {
         let userInfo = response.notification.request.content.userInfo
         print("AppDelegate: notification tap received: \(userInfo)")
+        
+        // Обработка действий с уведомлениями о задачах
+        if let type = userInfo["type"] as? String, type == "task",
+           let taskId = userInfo["taskId"] as? String,
+           let action = userInfo["action"] as? String {
+            
+            // Отправляем уведомление для обработки в приложении
+            NotificationCenter.default.post(
+                name: NSNotification.Name("TaskNotificationTapped"),
+                object: nil,
+                userInfo: [
+                    "taskId": taskId,
+                    "action": action
+                ]
+            )
+            
+            // Переход к задаче при тапе на уведомление
+            if action == "assignment" || action == "reminder" {
+                // Здесь можно добавить логику для перехода к деталям задачи
+                print("AppDelegate: should navigate to task details for taskId: \(taskId)")
+            }
+        }
         
         completionHandler()
     }
@@ -123,6 +182,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
     func applicationDidBecomeActive(_ application: UIApplication) {
         print("AppDelegate: App became active")
         updateUserOnlineStatus(isOnline: true)
+        // Сброс счетчика уведомлений
+        UIApplication.shared.applicationIconBadgeNumber = 0
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -134,12 +195,11 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         print("AppDelegate: App entered background")
         updateUserOnlineStatus(isOnline: false)
     }
+    
     func applicationWillTerminate(_ application: UIApplication) {
         print("AppDelegate: App will terminate")
         updateUserOnlineStatus(isOnline: false)
     }
-
-   
 }
 
 
@@ -164,5 +224,4 @@ extension AppDelegate {
             }
         }
     }
-
 }
